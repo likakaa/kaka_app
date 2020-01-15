@@ -1,15 +1,22 @@
+/* 代理 */
 module.exports = {
-    css: {
-    loaderOptions: {
-           css: {
-                   // options here will be passed to css-loader
-           },
-     postcss: {
-                // options here will be passed to postcss-loader
-                plugins: [require('postcss-px2rem')({
-                          remUnit: 75
-                })]
-           }
-      }
-  }
+    // baseUrl:"./",
+    publicPath:"./",
+    devServer:{
+        host:"127.0.0.1",
+        port:8081,
+        open:true,
+        // cnpm install http-proxy-middleware -D
+        // 代理设置完之后，要重启。
+        // 代理只是在开发环境当中起效果。
+        proxy:{
+            "/napi":{// 当你访问的地址是以/ele开头的话，就会使用该代理服务器
+                target:"https://m.duitang.com/",// 所要代理的服务器是谁  http://127.0.0.1/login
+                changeOrigin:true,// 是否允许代理
+                pathRewrite:{
+                    "^/napi":""
+                }
+            }
+        }
+    }
 }
