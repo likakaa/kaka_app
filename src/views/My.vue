@@ -15,9 +15,15 @@ export default {
     }
   },
   mounted(){
-    axios.get('/blog/list/by_category/?cate_key=5d4cdeba405dd99416c2afbe&start=0&limit=24&more=1&include_fields=sender%2Calbum%2Clike_count%2Cmsg').then((data)=>{
+    /* axios.get('/api/recommend/getRandContent?_t=1579144918067&csrfToken=&type=3&pageSize=10').then((data)=>{
       console.log(data)
     })
+
+    axios.get('/dui/napi/blog/list/by_album/?start=0&limit=24&more=1&include_fields=sender%2Calbum%2Clike_count&album_id=72085583').then((data)=>{
+      console.log(data)
+    }) */
+
+    
   }
 }
 </script>
