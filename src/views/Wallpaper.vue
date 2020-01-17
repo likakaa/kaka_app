@@ -5,7 +5,7 @@
         <waterfall :col="col" :data="data" @loadmore="loadmore">
           <template>
             <div class="cell-item" v-for="(item,index) in data" :key="index">
-              <img v-if="item.photo.path" :src="item.photo.path" alt="加载错误" />
+              <img v-if="item.photo.path" v-lazy="img" :src="item.photo.path" alt="加载错误" />
               <div class="item-body">
                 <div class="item-desc">{{item.title}}</div>
                 <div class="item-footer">
