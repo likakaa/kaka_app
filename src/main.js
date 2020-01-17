@@ -6,7 +6,9 @@ import Vant from 'vant';
 import 'vant/lib/index.css';
 //import 'lib-flexible/flexible.js'
 import waterfall from 'vue-waterfall2'
+import { PullRefresh } from 'vant';
 
+Vue.use(PullRefresh);
 Vue.use(waterfall);
 Vue.use(Vant);
 Vue.config.productionTip = false;

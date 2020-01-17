@@ -10,7 +10,7 @@ export default new Vuex.Store({
   },
   mutations: {
     GET_WALLPAPER(state,res){
-     state.wallpaper = res.data.object_list;
+     state.wallpaper = state.wallpaper.concat(res.data.object_list);
      console.log('在这里改变状态',state.wallpaper)
     }
   },

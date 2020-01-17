@@ -1,30 +1,32 @@
 <template>
   <div class="wallpaper">
+    <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
       <div class="container-water-fall">
-      <waterfall :col="col" :data="data" @loadmore="loadmore">
-        <template>
-          <div class="cell-item" v-for="(item,index) in data" :key="index">
-            <img v-if="item.img" :src="item.img" alt="加载错误">
-            <div class="item-body">
-              <div class="item-desc">{{item.title}}</div>
-              <div class="item-footer">
-                <div
-                  v-if="item.avatar"
-                  class="avatar"
-                  :style="{backgroundImage : `url(${item.avatar})` }"
-                ></div>
-                <div class="name">{{item.user}}</div>
-                <div class="like" :class="item.liked?'active':''">
-                  <i></i>
-                  <div class="like-total">{{item.like}}</div>
+        <waterfall :col="col" :data="data" @loadmore="loadmore">
+          <template>
+            <div class="cell-item" v-for="(item,index) in data" :key="index">
+              <img v-if="item.photo.path" :src="item.photo.path" alt="加载错误" />
+              <div class="item-body">
+                <div class="item-desc">{{item.title}}</div>
+                <div class="item-footer">
+                  <div
+                    v-if="item.sender.avatar"
+                    class="avatar"
+                    :style="{backgroundImage : `url(${item.sender.avatar})` }"
+                  ></div>
+                  <div class="name">{{item.album.name}}</div>
+                  <div class="like" :class="item.album.count?'active':''">
+                    <i></i>
+                    <div class="like-total">{{item.album.count}}</div>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </template>
-      </waterfall>
-      <loading :show="loading"/>
-    </div>
+          </template>
+        </waterfall>
+        <loading :show="loading"/>
+      </div>
+    </van-pull-refresh>
   </div>
 </template>
 
@@ -41,68 +43,12 @@ export default {
   },
   data(){
     return {
+      currentnum:0,
       data: [],
       col: 2,
       loading: false,
+      isLoading:false,
       gitHubData: {},
-      originData:[
-        {
-          img:
-            "https://image.watsons.com.cn//upload/8a316140.png?w=377&h=451&x-oss-process=image/resize,w_1080",
-          avatar:
-            "https://img.xiaohongshu.com/avatar/5b7d198a7e6e15000155f7c9.jpg@80w_80h_90q_1e_1c_1x.jpg",
-          title: "最近浴室新宠，日系神仙好物了解一下～",
-          user: "www",
-          like: "953"
-        },
-        {
-          img:
-            "https://image.watsons.com.cn//upload/083767f0.JPG?w=828&h=620&x-oss-process=image/resize,w_1080",
-          avatar:
-            "https://img.xiaohongshu.com/avatar/5b7d198a7e6e15000155f7c9.jpg@80w_80h_90q_1e_1c_1x.jpg",
-          title: "150元搞定全套护肤品，这些护肤好物必须交出来！",
-          user: "aaa",
-          like: "952"
-        },
-        {
-          img:
-            "https://image.watsons.com.cn//upload/02a4f38d.jpg?w=1067&h=1067&x-oss-process=image/resize,w_1080",
-          avatar:
-            "https://img.xiaohongshu.com/avatar/5b7d198a7e6e15000155f7c9.jpg@80w_80h_90q_1e_1c_1x.jpg",
-          title: "最近浴室新宠，日系神仙好物了解一下～",
-          user: "bbb",
-          like: "953"
-        },
-        {
-          img:
-            "https://image.watsons.com.cn//upload/589585c1.jpeg?x-oss-process=image/resize,w_1080",
-          avatar:
-            "https://img.xiaohongshu.com/avatar/5b7d198a7e6e15000155f7c9.jpg@80w_80h_90q_1e_1c_1x.jpg",
-          title: "150元搞定全套护肤品，这些护肤好物必须交出来！",
-          user: "ccc",
-          like: "953"
-        },
-        {
-          img:
-            "https://image.watsons.com.cn//upload/d862d932.jpg?w=1080&h=1440&x-oss-process=image/resize,w_1080",
-          avatar:
-            "https://img.xiaohongshu.com/avatar/5b7d198a7e6e15000155f7c9.jpg@80w_80h_90q_1e_1c_1x.jpg",
-          title: "最近浴室新宠，日系神仙好物了解一下～",
-          user: "ddd",
-          like: "953"
-        },
-        
-        {
-          img:
-            "https://image.watsons.com.cn//upload/60cc9b8e.jpg?w=991&h=744&x-oss-process=image/resize,w_1080",
-          avatar:
-            "https://img.xiaohongshu.com/avatar/5b7d198a7e6e15000155f7c9.jpg@80w_80h_90q_1e_1c_1x.jpg",
-          title: "150元搞定全套护肤品，这些护肤好物必须交出来！",
-          user: "eee",
-          like: "953"
-        },
-     
-      ],
     }
   },
   computed: {
@@ -114,30 +60,41 @@ export default {
     }
   },
   methods: {
+    /* 请求接口 */
+    getwallpaperlist(){  
+      let params = {
+        start:this.currentnum*24,  //从第几条开始:当前页数*24
+        limit:24,  //一次返回多少条
+        more:1,
+        include_fields:'sender,album,like_count,msg',  //包含的字段
+        cate_key:'5d5cf9260c14a94a3155e254'
+      }
+    this.$store.dispatch('getWallPaper',params)
+    this.currentnum = Number(this.currentnum) + 1;
+    console.log('现在是第几次',this.currentnum)
+    console.log('啦啦啦',this.$store.state.wallpaper);
+    this.data = this.$store.state.wallpaper;
+    },
+    /* 加载更多 */
     loadmore() {
       this.loading = true;
       setTimeout(() => {
-       // this.data = this.data.concat(this.originData, this.originData);
+        this.getwallpaperlist()
+        //this.data = this.data.concat(this.$store.state.wallpaper, this.$store.state.wallpaper);
         this.loading = false;
+      }, 1000);
+    },
+    /* 上拉刷新 */
+     onRefresh() {
+      setTimeout(() => {
+        this.$toast('刷新成功');
+        this.isLoading = false;
+       
       }, 1000);
     }
   },
   mounted(){
-   // this.data = this.originData;
-   
-
-
-    let params = {
-        start:24,
-        limit:24,
-        more:1,
-        include_fields:'sender,album,like_count,msg',
-        cate_key:'5d5cf9260c14a94a3155e254'
-      }
-    this.$store.dispatch('getWallPaper',params);
-
-    console.log('啦啦啦',this.$store.state.wallpaper);
-    this.data = this.$store.state.wallpaper;
+    this.getwallpaperlist()
   }
 }
 </script>
