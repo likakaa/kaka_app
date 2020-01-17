@@ -22,3 +22,13 @@
     3.上拉加载;
     4.移动端适配：
     5.跨域：使用正向代理（在vue.config.js文件中） 代理服务器https://www.duitang.com 
+
+    这里是master
+    我i在master上边做了修改
+    写了一些废话
+    我要push
+
+
+    很多时间回复
+    焦点时·
+    技术的
