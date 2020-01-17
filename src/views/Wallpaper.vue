@@ -67,7 +67,7 @@ export default {
         limit:24,  //一次返回多少条
         more:1,
         include_fields:'sender,album,like_count,msg',  //包含的字段
-        cate_key:'5d5cf9260c14a94a3155e254'
+        cate_key:'5d4bf0ed405dd99416c2af6f'
       }
     this.$store.dispatch('getWallPaper',params)
     this.currentnum = Number(this.currentnum) + 1;
@@ -80,11 +80,10 @@ export default {
       this.loading = true;
       setTimeout(() => {
         this.getwallpaperlist()
-        //this.data = this.data.concat(this.$store.state.wallpaper, this.$store.state.wallpaper);
         this.loading = false;
       }, 1000);
     },
-    /* 上拉刷新 */
+    /* 下拉刷新 */
      onRefresh() {
       setTimeout(() => {
         this.$toast('刷新成功');
